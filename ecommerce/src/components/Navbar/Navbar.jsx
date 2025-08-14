@@ -1,61 +1,55 @@
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useLogin } from "../../context/LoginContext";   //create new acc, protected route, add badges, folder structure editing
-export default function Navbar() {  //onclicking logout user info should nbe clear from localstorage, whn user logged out cart items set=[]
-  const {token, loginDispatch}=useLogin()
+import { useNavigate } from "react-router-dom";
+import { useLogin } from "../../context/LoginContext";
+
+export default function Navbar() {
+  const { token, loginDispatch } = useLogin();
   const navigate = useNavigate();
-  const [isAccountDropDown, setisAccountDropDown] = useState(false);
+  const [isAccountDropDown, setIsAccountDropDown] = useState(false);
+
   const onLoginClick = () => {
-   if(!token?.access_token){
-     navigate("/auth/login")
-    }
-    else{
-      loginDispatch({
-        type:"LOGOUT",
-      })
-
-    }
-
+    if (!token?.access_token) navigate("/auth/login");
+    else loginDispatch({ type: "LOGOUT" });
   };
+
   return (
-    <header className="flex justify-between bg-green-900 !py-4 !px-8 text-slate-50 items-center">
+    <header className="flex flex-wrap justify-between items-center bg-green-900 !py-4 !px-4 sm:!px-8 text-slate-50">
       <h1
-        onClick={() => {
-          navigate("/");
-        }}
-        className="text-5xl hover:cursor-pointer"
+        onClick={() => navigate("/")}
+        className="text-3xl sm:text-5xl font-bold cursor-pointer !mb-2 sm:!mb-0"
       >
         Shop It
       </h1>
-      <nav className="flex ml-auto gap-8">
+
+      <nav className="flex items-center gap-4 sm:gap-8">
         <span
-          onClick={() => {
-            navigate("/wishlist");
-          }}
-          className="material-symbols-outlined text-3xl hover:cursor-pointer"
+          onClick={() => navigate("/wishlist")}
+          className="material-symbols-outlined text-2xl sm:text-3xl cursor-pointer"
         >
           favorite
         </span>
+
         <span
-          onClick={() => {
-            navigate("/cart");
-          }}
-          className="material-symbols-outlined text-3xl hover:cursor-pointer"
+          onClick={() => navigate("/cart")}
+          className="material-symbols-outlined text-2xl sm:text-3xl cursor-pointer"
         >
           shopping_cart
         </span>
+
         <div className="relative">
           <span
-            onClick={() => {
-              setisAccountDropDown(!isAccountDropDown);
-            }}
-            className="material-symbols-outlined text-3xl hover:cursor-pointer"
+            onClick={() => setIsAccountDropDown(!isAccountDropDown)}
+            className="material-symbols-outlined text-2xl sm:text-3xl cursor-pointer"
           >
             account_circle
           </span>
+
           {isAccountDropDown && (
-            <div className="absolute bg-green-400">
-              <button onClick={onLoginClick}>
+            <div className="absolute right-0 !mt-2 bg-green-400 rounded shadow-md !w-24 sm:!w-32">
+              <button
+                onClick={onLoginClick}
+                className="!w-full text-left !px-4 !py-2 hover:bg-green-500 rounded"
+              >
                 {token?.access_token ? "Logout" : "Login"}
               </button>
             </div>
